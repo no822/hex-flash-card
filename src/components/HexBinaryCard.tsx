@@ -174,7 +174,8 @@ const valueSizeClass = (text: string) => {
   return " hbc-value-sm";
 };
 
-const normalize = (s: string) => s.replace(/\s/g, "").toUpperCase();
+const normalize = (s: string) =>
+  s.replace(/\s/g, "").toUpperCase().replace(/^0+/, "") || "0";
 
 const HexBinaryCard = ({ card, onCorrect, onIncorrect }: Props) => {
   const isHexType = card.config.type === FlashCardType.HEX;
