@@ -45,7 +45,7 @@ const ResultView = ({
       .rv-btn:active { background: #1d4ed8; }
     `}</style>
     <div className="rv-body">
-      <div className="rv-rate">{Math.round(stats.correnctRate * 100)}%</div>
+      <div className="rv-rate">{Math.round(stats.correctRate * 100)}%</div>
       <div className="rv-rate-label">Correct Rate</div>
       <div className="rv-stats">
         <div className="rv-stat">

@@ -4,7 +4,7 @@ import type { HexBinaryConverter } from "../../utils/HexBinaryConverter";
 import DefaultHexBinaryConverter from "../../utils/DefaultHexBinaryConverter";
 
 class BinaryFlashCard implements FlashCard {
-  converter: HexBinaryConverter = new DefaultHexBinaryConverter();
+  private converter: HexBinaryConverter = new DefaultHexBinaryConverter();
   config: FlashCardConfig;
 
   binary: string = "";

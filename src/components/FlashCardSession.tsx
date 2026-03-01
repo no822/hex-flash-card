@@ -62,7 +62,7 @@ const FlashCardSession = ({ setup, onFinish, onBack }: Props) => {
         sumOfProblems: sum,
         corrects: nextCorrects,
         incorrects: nextIncorrects,
-        correnctRate: sum > 0 ? nextCorrects / sum : 0,
+        correctRate: sum > 0 ? nextCorrects / sum : 0,
       });
       return;
     }
