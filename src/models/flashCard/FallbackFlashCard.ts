@@ -1,6 +1,5 @@
 import type { FlashCardConfig } from "../FlashCardConfig";
 import { FlashCardType } from "../FlashCardType";
-import { StudyMode } from "../StudyMode";
 import type { FlashCard } from "./FlashCard";
 
 class FallbackFlashCard implements FlashCard {
@@ -13,7 +12,6 @@ class FallbackFlashCard implements FlashCard {
   constructor() {
     this.config = {
       type: FlashCardType.BINARY,
-      mode: StudyMode.NORMAL,
     };
   }
 
