@@ -1,4 +1,4 @@
 export interface HexBinaryConverter {
-  toHex(b: string): string;
-  toBinary(h: string): string;
+  hexToBinary(hex: string): string;
+  binaryToHex(binary: string): string;
 }

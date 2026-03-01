@@ -14,8 +14,8 @@ class BinaryFlashCard implements FlashCard {
   constructor(config: FlashCardConfig, value: string) {
     this.config = config;
 
-    this.binary = this.converter.toBinary(value);
-    this.hex = this.converter.toHex(value);
+    this.binary = value;
+    this.hex = this.converter.binaryToHex(value);
     this.currentValue = this.binary;
   }
 
