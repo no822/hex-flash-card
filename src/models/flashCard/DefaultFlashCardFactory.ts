@@ -4,6 +4,8 @@ import type { FlashCard } from "./FlashCard";
 import type { FlashCardFactory } from "./FlashCardFactory";
 import HexFlashCard from "./HexFlashCard";
 import BinaryFlashCard from "./BinaryFlashCard";
+import DecimalToBinaryFlashCard from "./DecimalToBinaryFlashCard";
+import BinaryToDecimalFlashCard from "./BinaryToDecimalFlashCard";
 import FallbackFlashCard from "./FallbackFlashCard";
 
 class DefaultFlashCardFactory implements FlashCardFactory {
@@ -19,6 +21,10 @@ class DefaultFlashCardFactory implements FlashCardFactory {
 
       if (this.config.type === FlashCardType.BINARY) {
         return new BinaryFlashCard(this.config, value);
+      } else if (this.config.type === FlashCardType.DECIMAL_TO_BINARY) {
+        return new DecimalToBinaryFlashCard(this.config, value);
+      } else if (this.config.type === FlashCardType.BINARY_TO_DECIMAL) {
+        return new BinaryToDecimalFlashCard(this.config, value);
       } else {
         return new HexFlashCard(this.config, value);
       }

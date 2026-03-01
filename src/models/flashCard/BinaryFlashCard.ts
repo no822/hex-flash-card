@@ -9,13 +9,15 @@ class BinaryFlashCard implements FlashCard {
 
   binary: string = "";
   hex: string = "";
+  decimal: string = "";
   currentValue: string = "";
 
   constructor(config: FlashCardConfig, value: string) {
     this.config = config;
 
     this.hex = value.toUpperCase();
-    this.binary = this.converter.hexToBinary(value);
+    this.binary = this.converter.toBinary(value);
+    this.decimal = parseInt(value, 16).toString(10);
     this.currentValue = this.binary;
   }
 

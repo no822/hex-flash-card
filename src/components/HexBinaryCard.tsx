@@ -177,18 +177,55 @@ const valueSizeClass = (text: string) => {
 const normalize = (s: string) =>
   s.replace(/\s/g, "").toUpperCase().replace(/^0+/, "") || "0";
 
+const cardConfig = (card: FlashCard, hexDigits: number) => {
+  switch (card.config.type) {
+    case FlashCardType.BINARY:
+      return {
+        question: formatBinary(card.binary, hexDigits),
+        questionLabel: "Binary",
+        correctAnswer: card.hex,
+        answerLabel: "Hexadecimal",
+        placeholder: "e.g. F5",
+        filterInput: (raw: string) => raw.replace(/[^0-9a-fA-F]/g, ""),
+        formatAnswer: (s: string) => s.toUpperCase(),
+      };
+    case FlashCardType.DECIMAL_TO_BINARY:
+      return {
+        question: card.decimal,
+        questionLabel: "Decimal",
+        correctAnswer: card.binary,
+        answerLabel: "Binary",
+        placeholder: "e.g. 11110101",
+        filterInput: (raw: string) => raw.replace(/[^01\s]/g, ""),
+        formatAnswer: (s: string) => s,
+      };
+    case FlashCardType.BINARY_TO_DECIMAL:
+      return {
+        question: formatBinary(card.binary, hexDigits),
+        questionLabel: "Binary",
+        correctAnswer: card.decimal,
+        answerLabel: "Decimal",
+        placeholder: "e.g. 42",
+        filterInput: (raw: string) => raw.replace(/[^0-9]/g, ""),
+        formatAnswer: (s: string) => s,
+      };
+    default: // HEX
+      return {
+        question: card.hex.toUpperCase(),
+        questionLabel: "Hexadecimal",
+        correctAnswer: card.binary,
+        answerLabel: "Binary",
+        placeholder: "e.g. 11110101",
+        filterInput: (raw: string) => raw.replace(/[^01\s]/g, ""),
+        formatAnswer: (s: string) => formatBinary(s, hexDigits),
+      };
+  }
+};
+
 const HexBinaryCard = ({ card, onCorrect, onIncorrect }: Props) => {
-  const isHexType = card.config.type === FlashCardType.HEX;
   const hexDigits = card.hex.length;
-
-  const question = isHexType
-    ? card.hex.toUpperCase()
-    : formatBinary(card.binary, hexDigits);
-  const questionLabel = isHexType ? "Hexadecimal" : "Binary";
-
-  const correctAnswer = isHexType ? card.binary : card.hex;
-  const answerLabel = isHexType ? "Binary" : "Hexadecimal";
-  const placeholder = isHexType ? "e.g. 11110101" : "e.g. F5";
+  const { question, questionLabel, correctAnswer, answerLabel, placeholder, filterInput, formatAnswer } =
+    cardConfig(card, hexDigits);
 
   const [userInput, setUserInput] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -202,11 +239,7 @@ const HexBinaryCard = ({ card, onCorrect, onIncorrect }: Props) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value;
-    // Filter to valid characters only
-    const filtered = isHexType
-      ? raw.replace(/[^01\s]/g, "")
-      : raw.replace(/[^0-9a-fA-F]/g, "");
-    setUserInput(filtered);
+    setUserInput(filterInput(raw));
   };
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -268,7 +301,7 @@ const HexBinaryCard = ({ card, onCorrect, onIncorrect }: Props) => {
               <span>
                 Incorrect — correct answer is{" "}
                 <span className="hbc-feedback-answer">
-                  {isHexType ? formatBinary(correctAnswer, hexDigits) : correctAnswer.toUpperCase()}
+                  {formatAnswer(correctAnswer)}
                 </span>
               </span>
             )}

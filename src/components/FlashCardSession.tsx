@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Difficulty } from "../models/Difficulty";
+import { FlashCardType } from "../models/FlashCardType";
 import type { FlashCard } from "../models/flashCard/FlashCard";
 import DefaultFlashCardFactory from "../models/flashCard/DefaultFlashCardFactory";
 import type { StudyStatistics } from "../models/Statistics";
@@ -28,10 +29,14 @@ const FlashCardSession = ({ setup, onFinish, onBack }: Props) => {
 
   const generateValue = () => {
     const { max, digits } = DIFFICULTY_CONFIG[setup.difficulty];
-    return Math.floor(Math.random() * max)
-      .toString(16)
-      .toUpperCase()
-      .padStart(digits, "0");
+    const num = Math.floor(Math.random() * max);
+    if (
+      setup.type === FlashCardType.DECIMAL_TO_BINARY ||
+      setup.type === FlashCardType.BINARY_TO_DECIMAL
+    ) {
+      return num.toString(10);
+    }
+    return num.toString(16).toUpperCase().padStart(digits, "0");
   };
 
   const isInfinity = setup.mode === StudyMode.INFINITY;

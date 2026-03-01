@@ -7,6 +7,7 @@ class FallbackFlashCard implements FlashCard {
 
   binary: string = "";
   hex: string = "";
+  decimal: string = "";
   currentValue: string = "[ERROR] Invalid Flash Card";
 
   constructor() {

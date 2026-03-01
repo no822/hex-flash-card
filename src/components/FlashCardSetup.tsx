@@ -216,6 +216,8 @@ const MODES = [
 const CARD_TYPES = [
   { value: FlashCardType.HEX, label: "HEX → BIN", desc: "Type the binary" },
   { value: FlashCardType.BINARY, label: "BIN → HEX", desc: "Type the hex" },
+  { value: FlashCardType.DECIMAL_TO_BINARY, label: "DEC → BIN", desc: "Type the binary" },
+  { value: FlashCardType.BINARY_TO_DECIMAL, label: "BIN → DEC", desc: "Type the decimal" },
 ] as const;
 
 const DIFFICULTIES = [
