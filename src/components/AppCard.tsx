@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 interface Props {
   title?: string;
   footer?: ReactNode;
+  onBack?: () => void;
   children: ReactNode;
 }
 
@@ -58,6 +59,19 @@ const CSS = `
     letter-spacing: 0.05em;
   }
 
+  .ac-back {
+    all: unset;
+    cursor: pointer;
+    font-size: 11px;
+    color: #9ca3af;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: color 0.12s, background 0.12s;
+    white-space: nowrap;
+  }
+
+  .ac-back:hover { color: #374151; background: #e5e7eb; }
+
   .ac-statusbar {
     padding: 9px 16px;
     border-top: 1px solid #e5e7eb;
@@ -68,13 +82,25 @@ const CSS = `
     border-radius: 0 0 8px 8px;
   }
 
+  .ac-status {
+    font-size: 10px;
+    color: #d1d5db;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .ac-status-live {
+    color: #22c55e;
+    font-weight: 600;
+  }
+
   @keyframes ac-appear {
     from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 `;
 
-const AppCard = ({ title, footer, children }: Props) => (
+const AppCard = ({ title, footer, onBack, children }: Props) => (
   <>
     <style>{CSS}</style>
     <div className="ac-root">
@@ -86,6 +112,11 @@ const AppCard = ({ title, footer, children }: Props) => (
             <div className="ac-dot ac-dot-g" />
           </div>
           {title && <div className="ac-title">{title}</div>}
+          {onBack && (
+            <button className="ac-back" onClick={onBack}>
+              ← Back
+            </button>
+          )}
         </div>
 
         {children}

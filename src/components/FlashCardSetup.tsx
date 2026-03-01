@@ -1,6 +1,8 @@
 import { useState } from "react";
-import type { StudySetup } from "../models/studySetup/StudySetup";
+import { Difficulty } from "../models/Difficulty";
+import { FlashCardType } from "../models/FlashCardType";
 import { StudyMode } from "../models/StudyMode";
+import type { StudySetup } from "../models/studySetup/StudySetup";
 import AppCard from "./AppCard";
 
 interface Props {
@@ -46,9 +48,16 @@ const CSS = `
     background: #e5e7eb;
   }
 
-  .fcs-mode-grid {
+  .fcs-grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .fcs-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 8px;
     margin-bottom: 24px;
   }
@@ -193,18 +202,6 @@ const CSS = `
   .fcs-submit:hover { background: #2563eb; }
   .fcs-submit:active { background: #1d4ed8; }
 
-  .fcs-status {
-    font-size: 10px;
-    color: #d1d5db;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .fcs-status-live {
-    color: #22c55e;
-    font-weight: 600;
-  }
-
   @keyframes fcs-slide-down {
     from { opacity: 0; transform: translateY(-6px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -216,9 +213,22 @@ const MODES = [
   { value: StudyMode.INFINITY, label: "∞ Infinity", desc: "No end condition" },
 ] as const;
 
+const CARD_TYPES = [
+  { value: FlashCardType.HEX, label: "HEX → BIN", desc: "Type the binary" },
+  { value: FlashCardType.BINARY, label: "BIN → HEX", desc: "Type the hex" },
+] as const;
+
+const DIFFICULTIES = [
+  { value: Difficulty.EASY, label: "Easy", desc: "1 hex digit" },
+  { value: Difficulty.MEDIUM, label: "Medium", desc: "2 hex digits" },
+  { value: Difficulty.HARD, label: "Hard", desc: "4 hex digits" },
+] as const;
+
 const FlashCardSetup = ({ onSubmit }: Props) => {
   const [mode, setMode] = useState<StudyMode>(StudyMode.NORMAL);
   const [numberOfCards, setNumberOfCards] = useState(10);
+  const [type, setType] = useState<FlashCardType>(FlashCardType.HEX);
+  const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.MEDIUM);
 
   const clamp = (n: number) => Math.min(100, Math.max(1, n));
 
@@ -229,14 +239,14 @@ const FlashCardSetup = ({ onSubmit }: Props) => {
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit({ mode, numberOfCards });
+    onSubmit({ mode, numberOfCards, type, difficulty });
   };
 
   const footer = (
     <>
-      <span className="fcs-status fcs-status-live">● READY</span>
-      <span className="fcs-status">HEX ↔ BINARY</span>
-      <span className="fcs-status">v0.1.0</span>
+      <span className="ac-status ac-status-live">● READY</span>
+      <span className="ac-status">HEX ↔ BINARY</span>
+      <span className="ac-status">v0.1.0</span>
     </>
   );
 
@@ -251,8 +261,43 @@ const FlashCardSetup = ({ onSubmit }: Props) => {
             </span>
           </div>
 
+          {/* Card Type */}
+          <div className="fcs-section-label">Card Type</div>
+          <div className="fcs-grid-2">
+            {CARD_TYPES.map(({ value, label, desc }) => (
+              <button
+                key={value}
+                type="button"
+                className={`fcs-mode-btn${type === value ? " fcs-active" : ""}`}
+                onClick={() => setType(value)}
+              >
+                <span className="fcs-mode-check">{type === value ? "●" : "○"}</span>
+                <span className="fcs-mode-name">{label}</span>
+                <span className="fcs-mode-desc">{desc}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Difficulty */}
+          <div className="fcs-section-label">Difficulty</div>
+          <div className="fcs-grid-3">
+            {DIFFICULTIES.map(({ value, label, desc }) => (
+              <button
+                key={value}
+                type="button"
+                className={`fcs-mode-btn${difficulty === value ? " fcs-active" : ""}`}
+                onClick={() => setDifficulty(value)}
+              >
+                <span className="fcs-mode-check">{difficulty === value ? "●" : "○"}</span>
+                <span className="fcs-mode-name">{label}</span>
+                <span className="fcs-mode-desc">{desc}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Study Mode */}
           <div className="fcs-section-label">Study Mode</div>
-          <div className="fcs-mode-grid">
+          <div className="fcs-grid-2">
             {MODES.map(({ value, label, desc }) => (
               <button
                 key={value}
@@ -267,6 +312,7 @@ const FlashCardSetup = ({ onSubmit }: Props) => {
             ))}
           </div>
 
+          {/* Number of Cards */}
           {mode === StudyMode.NORMAL && (
             <div className="fcs-count-section">
               <div className="fcs-section-label">Number of Cards</div>
